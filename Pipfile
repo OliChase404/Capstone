@@ -12,6 +12,8 @@ flask-migrate = "*"
 flask-restful = "*"
 ipdb = "*"
 sqlalchemy-serializer = "*"
+beautifulsoup4 = "4.11.1"
+flask-bcrypt = "*"
 
 [dev-packages]
 
