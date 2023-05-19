@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: 'Raleway', sans-serif;
 }
 
 body{
@@ -18,12 +19,12 @@ body{
 
 .NavBar{
   display: flex;
+  flex-direction: row;
   text-decoration: none;
   background-color: rgba(0, 0, 0, 0.075);
   color: rgb(255, 255, 255);
-  font-family: 'Source Sans Pro', sans-serif;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: light;
   text-align: center;
   /* padding: 10px; */
   margin: 0px;
@@ -35,11 +36,12 @@ body{
 }
 
 .LinkContainer{
+  right: 0;
   display: flex;
   justify-content: space-between;
-  width: 70%;
-  margin-top: 2vh;
-  margin-left: 10vw;
+  width: 40%;
+  margin-top: 6vh;
+  margin-left: 50vw;
   margin-right: 10vw;
 
 }
@@ -52,10 +54,10 @@ body{
 
 .nav-link:hover {
   transform: scale(1.01);
-  color: orangered;
+  color: red;
 }
 
-.Logo{
+/* .Logo{
   font-family: 'Raleway', sans-serif;
   color: orangered;
   font-weight: bold;
@@ -64,20 +66,26 @@ body{
   float: left;
   margin-top: 1vh;
   margin-left: 2vw;
-}
+} */
 
-.UserImageContainer{
+.UserImageContainer {
+  position: relative;
   width: 10%;
   float: right;
-  margin-top: 1vh;
+  margin-top: 3vh;
   margin-right: 2vw;
+  /* z-index: 1; */
 }
-
+.UserImageContainer:hover .UserImageMenu {
+  display: block;
+  z-index: 0.1;
+}
 .UserImage {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   transition: all 0.1s ease-in-out;
+  z-index: 2;
 }
 
 .UserImage:hover {
@@ -85,6 +93,115 @@ body{
   filter: hue-rotate(90deg);
 }
 
+.UserImageMenu {
+  position: absolute;
+  top: -30%;
+  left: -19%;
+  width: 110%;
+  height: 60px;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.295);
+  padding: 10px;
+  display: none;
+  padding-top: 60px;
+  text-align: left
+}
+.UserImageMenuItem{
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  transition: all 0.1s ease-in-out;
+  font-size: medium;
+  /* padding-top: 100px; */
+  /* padding: 10px; */
+  /* margin-top: 1000px; */
+}
+
+.UserImageMenuItem:hover {
+  transform: scale(1.01);
+  color: red;
+}
+
+
+
+.LogoContainer{
+  position: absolute;
+  top: 1vh;
+  left: 0;
+  width: 400px;
+  height: 100px;
+  z-index: 0.1;
+}
+
+svg {
+  /* position: absolute; */
+  /* top: 0;
+  left: 0; */
+  font: 5em 'Raleway';
+  width: 100%;
+  height: 100%;
+}
+
+.g-ants{
+  width: 100%;
+  height: 100%;
+}
+
+.text-copy {
+  fill: none;
+  stroke: white;
+  stroke-dasharray: 6% 29%;
+  stroke-width: 2px;
+  stroke-dashoffset: 0%;
+  animation: stroke-offset 11s infinite linear;
+}
+
+.text-copy:nth-child(1){
+  stroke: #ff00b7c0;
+  animation-delay: -1;
+}
+
+.text-copy:nth-child(2){
+  stroke: #ff006ae0;
+  animation-delay: -2s;
+}
+
+.text-copy:nth-child(3){
+  stroke: #a0002d;
+  animation-delay: -3s;
+}
+
+.text-copy:nth-child(4){
+  stroke: #00f7ff;
+  animation-delay: -4s;
+}
+
+.text-copy:nth-child(5){
+  stroke: rgba(255, 38, 0, 0.877);
+  animation-delay: -5s;
+}
+
+@keyframes stroke-offset{
+  100% {stroke-dashoffset: -35%;}
+}
+
+.ProfilePageMain{
+  border: #ff00ea85 solid 1px;
+  background-color: #0000004f;
+  margin: 20%;
+  height: 60vh;
+  width: 60vw;
+}
+.ProfilePageImage{
+width: 100%;
+height: 50%;
+}
+
+.ProfilePageImage img{
+  width: 50%;
+  height: 100%;
+  float: left;
+  border: #ff00ea85 solid 1px;
+  }
 
 
 
