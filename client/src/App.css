@@ -33,6 +33,7 @@ body{
   width: 100%;
   z-index: 1;
   height: 5vh;
+  user-select: none;
 }
 
 .LinkContainer{
@@ -130,6 +131,7 @@ body{
   width: 400px;
   height: 100px;
   z-index: 0.1;
+  user-select: none;
 }
 
 svg {
@@ -186,10 +188,9 @@ svg {
 
 .ProfilePageMain{
   border: #ff00ea85 solid 1px;
+  aspect-ratio: 1 / 1;
   background-color: #0000004f;
   margin: 20%;
-  height: 60vh;
-  width: 60vw;
 }
 .ProfilePageImage{
 width: 100%;
@@ -204,6 +205,15 @@ height: 50%;
   }
 
 
+
+
+.BookCard{
+  border: #ff00ea85 solid 1px;
+  aspect-ratio: 2 / 1;
+  width: 80%;
+  margin: 10%;
+  margin-top: 20%;
+}
 
 
 

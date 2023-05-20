@@ -59,7 +59,7 @@ function MyProfile() {
               <div className="ProfilePageImage" {...getRootProps()} >
                 <input onChange={() => uploadImage()} {...getInputProps()}/>
                       <img src={user.image} alt="avatar"/>
-                      <div>hi</div>
+                      {/* <div>hi</div> */}
                     </div>
               </div>
     )

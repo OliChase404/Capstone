@@ -67,3 +67,11 @@ def get_user(id):
         db.session.delete(user)
         db.session.commit()
         return {}, 204
+    
+@app.route('/books/<int:id>', methods=['GET'])
+def get_book(id):
+    if request.method == 'GET':
+        book = Book.query.get(id)
+        return jsonify(book.to_dict())
+
+

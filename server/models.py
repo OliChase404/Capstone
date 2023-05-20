@@ -40,6 +40,8 @@ class User(db.Model, SerializerMixin):
     
 class Book(db.Model, SerializerMixin):
     __tablename__ = 'books'
+    serialize_rules = ('-user_filtered_books', '-book_genres')
+
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('authors.id'))
     author = db.Column(db.String)
