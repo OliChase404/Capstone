@@ -208,13 +208,78 @@ height: 50%;
 
 
 .BookCard{
-  border: #ff00ea85 solid 1px;
+  border: #ffffff85 solid 1px;
   aspect-ratio: 2 / 1;
   width: 80%;
   margin: 10%;
   margin-top: 20%;
 }
 
+.BookCardUpper{
+  display: flex;
+  flex-direction: row;
+  height: 85%;
+}
+
+.BookCardUpperLeft{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 30%;
+  margin: 1%;
+}
+.BookCardUpperLeft img {
+  margin-bottom: 1%;
+}
+
+.BookCardUpperRight{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 70%;
+}
+
+.BookCardUpperRight h1{
+  margin-top: 2%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: normal;
+}
+
+.BookCardUpperRight h2{
+  margin-top: 2%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: normal;
+}
+
+.BookCardUpperRight p{
+  margin-top: 2%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: lighter;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: rgba(204, 0, 255, 0.568) rgba(0, 0, 0, 0.486);
+  scrollbar-width: thin;
+}
 
 
+
+.BookCardLower{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 15%;
+}
+.BookCardLower button{
+  margin: 1%;
+  width: 20%;
+  background-color: #0000004f;
+  color: #fffffff6;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+}
 
