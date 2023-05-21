@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, make_response, session
+from random import choice as rc
 
 from config import app, db
 
@@ -46,13 +47,13 @@ def signup():
     return new_user.to_dict()
 
 @app.route('/users', methods=['GET'])
-def get_users():
+def users_index():
     users = User.query.all()
     return jsonify([user.to_dict() for user in users])
 
 
 @app.route('/users/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
-def get_user(id):
+def users_show(id):
     user = User.query.get(id)
     if request.method == 'GET':
         return user.to_dict()
@@ -69,9 +70,36 @@ def get_user(id):
         return {}, 204
     
 @app.route('/books/<int:id>', methods=['GET'])
-def get_book(id):
+def books_show(id):
     if request.method == 'GET':
         book = Book.query.get(id)
         return jsonify(book.to_dict())
-
+    
+@app.route('/recommend_book', methods=['GET'])
+def recommend_book():
+    if request.method == 'GET':
+        user = User.query.get(session['user_id'])
+        user_books = UserFilteredBook.query.filter(UserFilteredBook.user_id == user.id).all()
+        new_books = Book.query.filter(Book.id.notin_([user_book.book_id for user_book in user_books])).all()
+        return jsonify(rc(new_books).to_dict())
+    
+@app.route('/user_filtered_books', methods=['GET', 'POST'])
+def user_filtered_books():
+    if request.method == 'GET':
+        user = User.query.get(session['user_id'])
+        user_books = UserFilteredBook.query.filter(UserFilteredBook.user_id == user.id).all()
+        return jsonify([user_book.to_dict() for user_book in user_books])
+    elif request.method == 'POST':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        book = Book.query.get(request_json.get('book_id'))
+        new_user_book = UserFilteredBook(
+            user_id = user.id,
+            book_id = book.id,
+            user_vote = request_json.get('user_vote'),
+            user_favorite = request_json.get('user_favorite')
+            )
+        db.session.add(new_user_book)
+        db.session.commit()
+        return new_user_book.to_dict()
 

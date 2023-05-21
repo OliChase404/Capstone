@@ -113,6 +113,7 @@ class BookGenre(db.Model, SerializerMixin):
     
 class UserFilteredBook(db.Model, SerializerMixin):
     __tablename__ = 'user_filtered_books'
+    serialize_rules = ('-user', '-book')
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))

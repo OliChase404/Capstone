@@ -5,17 +5,79 @@ import AudioPlayer from './AudioPlayer';
 
 
 function BookCard(){
-    const { user } = React.useContext(UserContext);
-    const [book, setBook] = useState([]);
+    const { user } = React.useContext(UserContext)
+    const [book, setBook] = useState([])
+    const [skipped, setSkipped] = useState(JSON.parse(localStorage.getItem('skipped')) || [])
 
     useEffect(() => {
-        fetch("/books/5")
-            .then(res => res.json())
-            .then(data => {
-                setBook(data);
-            })
+        localStorage.setItem('skipped', JSON.stringify([]))
+        getBook()
     }, [])
 
+    let i = 0
+
+    function getBook() {
+        fetch("/recommend_book")
+          .then(res => res.json())
+          .then(data => {
+            setBook(data)
+            if (skipped.includes(data.id)) {
+              getBook();
+              i++;
+            } else if (i >= 10) {
+              alert("Auto Skip Limit Reached. Resetting.")
+              i = 0;
+              setSkipped([])
+              localStorage.setItem('skipped', JSON.stringify([]))
+            }
+          })
+      }
+    function handleFavorite(){
+        fetch('/user_filtered_books', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    book_id: book.id,
+                    user_vote: true,
+                    user_favorite: true
+                })
+            }).then(() => getBook())
+          }
+    function handleLike() {
+        fetch('/user_filtered_books', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: user.id,
+            book_id: book.id,
+            user_vote: true,
+            user_favorite: false
+          })
+        }).then(() => getBook())
+      }
+      function handleSkip() {
+        setSkipped(prevState => [...prevState, book.id]);
+        getBook()
+      }
+    function handleDislike() {
+        fetch('/user_filtered_books', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    book_id: book.id,
+                    user_vote: false,
+                    user_favorite: false
+                })
+            }).then(() => getBook())
+          }
 
     return(
         <div className="BookCard">
@@ -34,11 +96,11 @@ function BookCard(){
 
             </div>
             <div className="BookCardLower">
-                <button>Dislike</button>
-                <button>Skip For Now</button>
+                <button onClick={() => handleDislike()}>Dislike</button>
+                <button onClick={() => handleSkip()}>Skip For Now</button>
                 <button onClick={() => window.open(book.audible_url)}>View On Audible</button>
-                <button>Like</button>
-                <button>Favorite</button>
+                <button onClick={() => handleLike()}>Like</button>
+                <button onClick={() => handleFavorite()}>Favorite</button>
             </div>
 
         </div>
