@@ -1,6 +1,12 @@
 .App {
   text-align: center;
   font-family: 'Raleway', sans-serif;
+  margin-top: calc(15vh - var(--navbar-height));
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+:root {
+  --navbar-height: 50px; /* Change this value to the actual height of your navbar */
 }
 
 body{
@@ -21,19 +27,17 @@ body{
   display: flex;
   flex-direction: row;
   text-decoration: none;
-  background-color: rgba(0, 0, 0, 0.075);
+  /* background-color: rgba(0, 0, 0, 0.075); */
   color: rgb(255, 255, 255);
   font-size: 20px;
   font-weight: light;
   text-align: center;
-  /* padding: 10px; */
-  margin: 0px;
   position: fixed;
   top: 0px;
   width: 100%;
   z-index: 1;
-  height: 5vh;
   user-select: none;
+  margin-bottom: 100px;
 }
 
 .LinkContainer{
@@ -44,7 +48,7 @@ body{
   margin-top: 6vh;
   margin-left: 50vw;
   margin-right: 10vw;
-
+  
 }
 
 .nav-link {
@@ -58,24 +62,12 @@ body{
   color: red;
 }
 
-/* .Logo{
-  font-family: 'Raleway', sans-serif;
-  color: orangered;
-  font-weight: bold;
-  font-size: 30px;
-  width: 20%;
-  float: left;
-  margin-top: 1vh;
-  margin-left: 2vw;
-} */
-
 .UserImageContainer {
   position: relative;
   width: 10%;
   float: right;
   margin-top: 3vh;
   margin-right: 2vw;
-  /* z-index: 1; */
 }
 .UserImageContainer:hover .UserImageMenu {
   display: block;
@@ -101,7 +93,7 @@ body{
   width: 110%;
   height: 60px;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.295);
+  background-color: rgba(0, 0, 0, 0.507);
   padding: 10px;
   display: none;
   padding-top: 60px;
@@ -112,9 +104,6 @@ body{
   color: rgb(255, 255, 255);
   transition: all 0.1s ease-in-out;
   font-size: medium;
-  /* padding-top: 100px; */
-  /* padding: 10px; */
-  /* margin-top: 1000px; */
 }
 
 .UserImageMenuItem:hover {
@@ -135,9 +124,6 @@ body{
 }
 
 svg {
-  /* position: absolute; */
-  /* top: 0;
-  left: 0; */
   font: 5em 'Raleway';
   width: 100%;
   height: 100%;
@@ -205,14 +191,13 @@ height: 50%;
   }
 
 
-
-
 .BookCard{
-  border: #ffffff85 solid 1px;
+  border: #ff00f288 outset 1px;
+  background-color: #0000004f;
   aspect-ratio: 2 / 1;
-  width: 80%;
-  margin: 10%;
-  margin-top: 20%;
+  width: 90%;
+  margin: 5%;
+  /* margin-top: 20%; */
 }
 
 .BookCardUpper{
@@ -220,52 +205,46 @@ height: 50%;
   flex-direction: row;
   height: 85%;
 }
-
 .BookCardUpperLeft{
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 30%;
+  width: 35%;
   margin: 1%;
 }
 .BookCardUpperLeft img {
   margin-bottom: 1%;
 }
-
 .BookCardUpperRight{
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 70%;
 }
-
 .BookCardUpperRight h1{
   margin-top: 2%;
   margin-bottom: 0%;
   padding: 0%;
   font-weight: normal;
 }
-
 .BookCardUpperRight h2{
   margin-top: 2%;
   margin-bottom: 0%;
   padding: 0%;
   font-weight: normal;
+  font-size: large;
 }
-
 .BookCardUpperRight p{
   margin-top: 2%;
   margin-bottom: 0%;
-  padding: 0%;
+  padding: 3%;
+  line-height: 22px;
   font-weight: lighter;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-color: rgba(204, 0, 255, 0.568) rgba(0, 0, 0, 0.486);
   scrollbar-width: thin;
 }
-
-
-
 .BookCardLower{
   display: flex;
   flex-direction: row;
@@ -283,3 +262,183 @@ height: 50%;
   cursor: pointer;
 }
 
+
+.ListPrimary{
+  /* display: flex; */
+  border: #ff000063 solid 2px;
+  aspect-ratio: 1 / 1;
+  background-color: #0000004f;
+  margin: 2%;
+  height: 84vh;
+  width: 95%;
+  padding: 5px;
+  /* margin-top: 10%;
+  margin-bottom: 10%; */
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: rgba(204, 0, 255, 0.568) rgba(0, 0, 0, 0.486);
+  scrollbar-width: thin;
+}
+.ListPrimary h1 {
+  margin-top: 0%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: normal;
+  font-size: x-large;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 2px 2px 2px #000000;
+}
+.ListPrimary h2 {
+  margin-top: 0%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: lighter;
+  font-size: large;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 2px 2px 2px #000000;
+  margin-bottom: 1%;
+}
+.ListContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.ListCard{
+  border: #ffffff85 solid 1px;
+
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 1%;
+
+}
+.ListCardUpper{
+  display: flex;
+  flex-direction: row;
+  height: 85%;
+}
+.ListCardUpperLeft{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 20%;
+  margin: 1%;
+}
+.ListCardUpperLeft img {
+  margin-bottom: 1%;
+}
+.ListCardUpperRight{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 70%;
+}
+.ListCardUpperRight h1{
+  margin-top: 2%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: normal;
+  font-size: x-large;
+}
+.ListCardUpperRight h2{
+  margin-top: 2%;
+  margin-bottom: 0%;
+  padding: 0%;
+  font-weight: normal;
+  font-size: medium;
+  margin-bottom: 2%;
+}
+.ListCardLower{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 15%;
+}
+.ListCardLower button{
+  margin: 1%;
+  width: 20%;
+  height: 40px;
+  background-color: #0000004f;
+  color: #fffffff6;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.ListHeader{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.ListHeader h2{
+  width: 25%;
+  margin: 0%;
+}
+
+.ListColumn{
+  display: flex;
+  flex-direction: column;
+  width: 23%;
+  height: 95%;
+  margin: 0%;
+  padding: 0%;
+  border: #00000063 solid 2px;
+  background-color: #0000004f;
+  text-align: left;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+}
+
+.ListColumnCard{
+margin-left: 3%;
+margin-right: 3%;
+margin-top: 2%;
+margin-bottom: 3%;
+padding: 5%;
+border: #00000063 solid 2px;
+background-color: #0077ff5e;
+}
+
+
+
+
+
+.MyDataLink{
+  text-decoration: none;
+}
+.MyDataLinkContainer:hover .MyDataMenu{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.MyDataMenu {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.952);
+  display: none;
+  text-align: left;
+  padding: 15px;
+  display: none;
+  z-index: 2;
+}
+.MyDataMenuItem{
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  transition: all 0.1s ease-in-out;
+  font-size: medium;
+  margin-top: 10%;
+} 
+
+.MyDataMenuItem:hover {
+  transform: scale(1.01);
+  color: red;
+} 

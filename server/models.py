@@ -20,9 +20,9 @@ class User(db.Model, SerializerMixin):
     user_filtered_books = db.relationship('UserFilteredBook', back_populates='user')
     filtered_books = association_proxy('user_filtered_books', 'book', creator=lambda b: UserFilteredBook(book=b))
 
-    user_favorite_genres = db.relationship('UserFavoriteGenre', back_populates='user')
+    # user_favorite_genres = db.relationship('UserFavoriteGenre', back_populates='user')
 
-    user_favorite_narrators = db.relationship('UserFavoriteNarrator', back_populates='user')
+    # user_favorite_narrators = db.relationship('UserFavoriteNarrator', back_populates='user')
 
     @hybrid_property
     def password_hash(self):
@@ -57,20 +57,42 @@ class Book(db.Model, SerializerMixin):
     audible_url = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    processed = db.Column(db.Boolean, default=False)
     
     book_genres = db.relationship('BookGenre', back_populates='book')
     genres = association_proxy('book_genres', 'genre', creator=lambda g: BookGenre(genre=g))
     
     user_filtered_books = db.relationship('UserFilteredBook', back_populates='book')
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'author_id': self.author_id,
+            'author': self.author,
+            'title': self.title,
+            'narrator_id': self.narrator_id,
+            'narrator': self.narrator,
+            'cover': self.cover,
+            'average_rating': self.average_rating,
+            'number_of_ratings': self.number_of_ratings,
+            'summary': self.summary,
+            'sample': self.sample,
+            'series': self.series,
+            'audible_url': self.audible_url,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'processed': self.processed,
+            'genres': [genre.to_dict() for genre in self.book_genres]
+    }
     
 class Genre(db.Model, SerializerMixin):
     __tablename__ = 'genres'
+    serialize_rules = ('-book_genres', '-user_favorite_genres', "-books")
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     
     book_genres = db.relationship('BookGenre', back_populates='genre')
     books = association_proxy('book_genres', 'book', creator=lambda b: BookGenre(book=b))
-    user_favorite_genres = db.relationship('UserFavoriteGenre', back_populates='genre')
+    # user_favorite_genres = db.relationship('UserFavoriteGenre', back_populates='genre')
 
 class Author(db.Model, SerializerMixin):
     __tablename__ = 'authors'
@@ -82,28 +104,29 @@ class Narrator(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    user_favorite_narrators = db.relationship('UserFavoriteNarrator', back_populates='narrator')
+    # user_favorite_narrators = db.relationship('UserFavoriteNarrator', back_populates='narrator')
 
-class UserFavoriteNarrator(db.Model, SerializerMixin):
-    __tablename__ = 'user_favorite_narrators'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    narrator_id = db.Column(db.Integer, db.ForeignKey('narrators.id'))
+# class UserFavoriteNarrator(db.Model, SerializerMixin):
+#     __tablename__ = 'user_favorite_narrators'
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     narrator_id = db.Column(db.Integer, db.ForeignKey('narrators.id'))
 
-    user = db.relationship('User', back_populates='user_favorite_narrators')
-    narrator = db.relationship('Narrator', back_populates='user_favorite_narrators')
+#     user = db.relationship('User', back_populates='user_favorite_narrators')
+#     narrator = db.relationship('Narrator', back_populates='user_favorite_narrators')
 
-class UserFavoriteGenre(db.Model, SerializerMixin):
-    __tablename__ = 'user_favorite_genres'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
+# class UserFavoriteGenre(db.Model, SerializerMixin):
+#     __tablename__ = 'user_favorite_genres'
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
 
-    user = db.relationship('User', back_populates='user_favorite_genres')
-    genre = db.relationship('Genre', back_populates='user_favorite_genres')
+#     user = db.relationship('User', back_populates='user_favorite_genres')
+#     genre = db.relationship('Genre', back_populates='user_favorite_genres')
     
 class BookGenre(db.Model, SerializerMixin):
     __tablename__ = 'book_genres'
+    serialize_rules = ('-book',)
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
     genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
@@ -122,6 +145,31 @@ class UserFilteredBook(db.Model, SerializerMixin):
     
     user = db.relationship('User', back_populates='user_filtered_books')
     book = db.relationship('Book', back_populates='user_filtered_books')
+
+class UserFilteredAuthor(db.Model, SerializerMixin):
+    __tablename__ = 'user_filtered_authors'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('authors.id'))
+    user_vote = db.Column(db.Boolean)
+    user_favorite = db.Column(db.Boolean)
+
+class UserFilteredNarrator(db.Model, SerializerMixin):
+    __tablename__ = 'user_filtered_narrators'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    narrator_id = db.Column(db.Integer, db.ForeignKey('narrators.id'))
+    user_vote = db.Column(db.Boolean)
+    user_favorite = db.Column(db.Boolean)
+
+class UserFilteredGenre(db.Model, SerializerMixin):
+    __tablename__ = 'user_filtered_genres'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
+    user_vote = db.Column(db.Boolean)
+    user_favorite = db.Column(db.Boolean)
+    
     
 class BookConnection(db.Model, SerializerMixin):
     __tablename__ = 'book_connections'

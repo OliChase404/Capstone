@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { UserContext } from "../App";
-import AudioPlayer from './AudioPlayer';
+import AudioPlayer from '../AudioPlayer';
 // import {fill,} from "./animate.scss";
 
 
@@ -79,6 +79,11 @@ function BookCard(){
             }).then(() => getBook())
           }
 
+    // const renderGenres = book.genres.map(genre => {
+    //   return <p>genre.name</p>
+    // })
+    console.log(book)
+
     return(
         <div className="BookCard">
             <div className="BookCardUpper">
@@ -90,7 +95,7 @@ function BookCard(){
                 <div className="BookCardUpperRight">
                     <h1>{book.title}</h1>
                     <h2>By {book.author} - Read By {book.narrator}</h2>
-                    <span></span>
+                    {/* {book[genres][0][genre][name]} */}
                     <p>{book.summary}</p>
                 </div>
 

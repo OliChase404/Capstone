@@ -5,9 +5,15 @@ import { useState, useEffect, createContext } from "react";
 import LoginSignup from "./LoginSignUp/LoginSignUp";
 import Home from "./Home/Home";
 import NavBar from "./NavBar/NavBar";
-import Favorites from "./Favorites/Favorites";
 import MyData from "./MyData/MyData";
 import MyProfile from "./MyProfile/MyProfile";
+import AuthorList from "./MyData/AuthorList/AuthorList";
+import LikeList from "./MyData/LikeList/LikeList";
+import DislikeList from "./MyData/DislikeList/DislikeList";
+import GenreList from "./MyData/GenreList/GenreList";
+import NarratorList from "./MyData/NarratorList/NarratorList";
+import Favorites from "./MyData/Favorites/Favorites";
+
 
 export const UserContext = createContext(null);
 
@@ -33,9 +39,17 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" element={<Home/>} />
-          <Route path="/favorites" element={<Favorites/>} />
-          <Route path="/mydata" element={<MyData/>} />
           <Route path="/myprofile" element={<MyProfile/>} />
+          <Route path="/mydata" element={<MyData/>} />
+          <Route path="/mydata/authors" element={<AuthorList/>} />
+          <Route path="/mydata/likes" element={<LikeList/>} />
+          <Route path="/mydata/dislikes" element={<DislikeList/>} />
+          <Route path="/mydata/genres" element={<GenreList/>} />
+          <Route path="/mydata/narrators" element={<NarratorList/>} />
+          <Route path="/mydata/favorites" element={<Favorites/>} />
+
+          
+        
         </Routes>
       </UserContext.Provider>
     </div>

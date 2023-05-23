@@ -8,7 +8,7 @@ import Axios from "axios";
 function MyProfile() {
     const { user, setUser } = React.useContext(UserContext)
     const [files, setFiles] = React.useState([])
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('')
 
 
     const {getRootProps, getInputProps} = useDropzone({
@@ -34,8 +34,8 @@ function MyProfile() {
         "https://api.cloudinary.com/v1_1/dslclh67l/image/upload",
         formData
       ).then((response) => {
-        setImageUrl(response.data.url);
-      });
+        setImageUrl(response.data.url)
+      })
     }
 
     useEffect(() => {
