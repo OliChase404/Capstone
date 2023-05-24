@@ -4,6 +4,8 @@
   margin-top: calc(15vh - var(--navbar-height));
   overflow-x: hidden;
   overflow-y: hidden;
+  display: flex;
+  justify-content: center;
 }
 :root {
   --navbar-height: 50px; /* Change this value to the actual height of your navbar */
@@ -19,7 +21,20 @@ body{
   color: rgb(255, 255, 255);
   font-family: 'Raleway', sans-serif;
   margin-top: 8vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
   
+  /* text-align: center; */
+  
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px rgb(0, 255, 255) inset !important;
+}
+input:-webkit-autofill{
+  -webkit-text-fill-color: rgb(0, 0, 0) !important;
 }
 
 
@@ -37,7 +52,7 @@ body{
   width: 100%;
   z-index: 1;
   user-select: none;
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
 }
 
 .LinkContainer{
@@ -79,6 +94,8 @@ body{
   border-radius: 50%;
   transition: all 0.1s ease-in-out;
   z-index: 2;
+  /* box-shadow: #000000de 0px 0px 20px 0px; */
+
 }
 
 .UserImage:hover {
@@ -111,6 +128,83 @@ body{
   color: red;
 }
 
+.LoginSignup{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #000000b6;
+}
+
+.LoginSignupFormContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* aspect-ratio: 1 / 1; */
+  text-align: center;
+  /* font-weight: lighter; */
+  width: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+  /* margin-top: 10%; */
+}
+.LoginSignupFormContainer form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  /* margin-top: 10%; */
+  /* margin-bottom: 10%; */
+}
+.LoginSignupForm{
+  width: 80%;
+  /* height: 100%; */
+}
+.LoginSignupFormContainer input{
+  width: 100%;
+  /* height: 20%; */
+  margin-top: 5%;
+  /* margin-bottom: 20%; */
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  font-size: 20px;
+  font-weight: lighter;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.507);
+  color: rgb(255, 255, 255);
+  transition: all 0.1s ease-in-out;
+}
+.LoginSignupFormContainer input:hover{
+  transform: scale(1.01);
+  background-color: rgba(0, 0, 0, 0.507);
+  color: red;
+}
+.LoginSignupFormContainer button{
+  width: 60%;
+  /* height: 20%; */
+  margin-top: 5%;
+  margin-bottom: 2%;
+  border: #a700bd 2px solid;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  font-size: 20px;
+  font-weight: lighter;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.507);
+  color: rgb(255, 255, 255);
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+.LoginSignupFormContainer button:hover{
+  transform: scale(1.01);
+  background-color: rgb(0, 217, 255);
+  width: 100%;
+  color: rgb(0, 0, 0);
+}
 
 
 .LogoContainer{
@@ -141,6 +235,7 @@ svg {
   stroke-width: 2px;
   stroke-dashoffset: 0%;
   animation: stroke-offset 11s infinite linear;
+  user-select: none;
 }
 
 .text-copy:nth-child(1){
@@ -173,37 +268,159 @@ svg {
 }
 
 .ProfilePageMain{
-  border: #ff00ea85 solid 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   aspect-ratio: 1 / 1;
-  background-color: #0000004f;
-  margin: 20%;
+  width: 60vh;
+  margin-left: 20vh;
+  margin-right: 20vh;
+  margin-top: 4%;
 }
 .ProfilePageImage{
 width: 100%;
 height: 50%;
+
 }
 
 .ProfilePageImage img{
+  border-radius: 50%;
   width: 50%;
   height: 100%;
-  float: left;
-  border: #ff00ea85 solid 1px;
+  cursor: pointer;
+  box-shadow: #00a7bd 0px 0px 50px 0px;
+  transition: all 0.3s ease-in-out;
+  }
+  .ProfilePageImage img:hover{
+    transform: scale(1.005);
+    transition: all 0.3s ease-in-out;
+    box-shadow: #b700bd 0px 0px 50px 0px;
+  }
+  .ProfilePageInfo{
+    text-align: left;
+    margin-top: 6vh;
+    width: 50%;
+    height: 30%;
+
+    display: flex;
+    flex-direction: column;
   }
 
+  .ProfilePageInfo div{
+    border: #000000dc solid 1px;
+    background-color: #0000004f;
+    padding: 2%;
+    margin-bottom: 6%;
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  .ProfilePageInfo div:hover{
+    background-color: #c300ff8e;
+    box-shadow: #a700bd 0px 0px 50px 0px;
+    transition: all 0.3s ease-in-out;
+  }
+  .ProfilePageInfoBtn{
+    text-align: center;
+  }
+  .hidden{
+    display: none;
+    opacity: 0;
+  }
+  .PopUpWindow{
+    /* display: block; */
+    position: absolute;
+    /* margin: 20%; */
+    height: 60vh;
+    width: 80vw;
+    z-index: 3;
+    background-color: #000000ee;
+    transition: all 2s ease-in-out;
+  }
+  .PopUpWindowClose{
+    aspect-ratio: 1 / 1;
+    float: right;
+    margin: 2%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    color: #a901af;
+    font-weight: bolder;
+    font-size: larger;
+  }
+  .PopUpWindowClose:hover{
+    color: #f700ff;
+    box-shadow: #e100ff 0px 0px 10px 0px;
+    transition: all 0.3s ease-in-out;
+  }
+  .PopUpWindow form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70%;
+    width: 100%;
+  }
+  .PopUpWindow form input{
+    display: block;
+    margin-top: 20%;
+    width: 200%;
+    height: 50%;
+    text-align: center;
+    padding: 1%;
+    border: #ff00c8dc solid 1px;
+    background-color: #0e004269;
+    color: #ffffff;
+    font-size: larger;
+    font-weight: bolder;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .PopUpWindow form input:hover{
+    background-color: #ff00c8dc;
+    color: #000000;
+    transition: all 0.3s ease-in-out;
+  }
+  .PopUpWindow button{
+    cursor: pointer;
+    width: 20%;
+    margin: 10%;
+    padding: 2%;
+    border: #ff00c8dc solid 1px;
+    background-color: #0e004269;
+    color: #ffffff;
+    font-size: larger;
+    font-weight: bolder;
+    transition: all 0.3s ease-in-out;
+  }
+  .PopUpWindow button:hover{
+    background-color: #ff00c8dc;
+    color: #000000;
+    width: 60%;
+    transition: all 0.3s ease-in-out;
+  }
 
 .BookCard{
   border: #ff00f288 outset 1px;
   background-color: #0000004f;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 1.6 / 1;
   width: 90%;
+  max-height: 80vh;
   margin: 5%;
-  /* margin-top: 20%; */
+  /* display: none;
+  opacity: 0; */
+  /* transition: opacity 10s ease-in-out; */
+}
+.ShowBookCard{
+  /* opacity: 1;
+  display: block; */
 }
 
 .BookCardUpper{
   display: flex;
   flex-direction: row;
-  height: 85%;
+  height: 90%;
 }
 .BookCardUpperLeft{
   display: flex;
@@ -238,8 +455,8 @@ height: 50%;
   margin-top: 2%;
   margin-bottom: 0%;
   padding: 3%;
-  line-height: 22px;
-  font-weight: lighter;
+  line-height: 24px;
+  font-weight: normal;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-color: rgba(204, 0, 255, 0.568) rgba(0, 0, 0, 0.486);
@@ -248,23 +465,54 @@ height: 50%;
 .BookCardLower{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 15%;
+  height: 10%;
 }
 .BookCardLower button{
   margin: 1%;
-  width: 20%;
+  /* margin-top: 4%; */
+  width: 18%;
+  height: 70%;
+  /* bottom: 0; */
+  padding: 1%;
   background-color: #0000004f;
-  color: #fffffff6;
+  color: #ffffff;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.FavButton:hover{
+  color: #ff00ff;
+  border: #ff00ea solid 1px;
+  box-shadow: #ff00ea 0px 0px 12px 0px;
+}
+.LikeButton:hover{
+  color: #33ff00dc;
+  border: #33ff00dc solid 2px;
+  box-shadow: #33ff00dc 0px 0px 12px 0px;
+}
+.AudibleButton:hover{
+  color: #ffa000;
+  border: #ffa000 solid 2px;
+  box-shadow: #ffa000 0px 0px 12px 0px;
+}
+.SkipButton:hover{
+  color: #1100ffdc;
+  border: #1100ffdc solid 2px;
+  box-shadow: #1100ffdc 0px 0px 12px 0px;
+}
+.DislikeButton:hover{
+  color: #ff0000;
+  border: #ff0000 solid 2px;
+  box-shadow: #ff0000 0px 0px 12px 0px;
 }
 
 
 .ListPrimary{
-  /* display: flex; */
   border: #ff000063 solid 2px;
   aspect-ratio: 1 / 1;
   background-color: #0000004f;
@@ -272,8 +520,6 @@ height: 50%;
   height: 84vh;
   width: 95%;
   padding: 5px;
-  /* margin-top: 10%;
-  margin-bottom: 10%; */
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-color: rgba(204, 0, 255, 0.568) rgba(0, 0, 0, 0.486);
@@ -407,9 +653,6 @@ padding: 5%;
 border: #00000063 solid 2px;
 background-color: #0077ff5e;
 }
-
-
-
 
 
 .MyDataLink{

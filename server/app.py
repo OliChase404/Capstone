@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, make_response, session
+from collections import Counter
 from random import choice as rc
 
-from config import app, db
+from config import app, db, bcrypt
 
 from models import *
 
@@ -62,6 +63,9 @@ def users_show(id):
         user.email = request_json.get('email', user.email)
         user.username = request_json.get('username', user.username)
         user.image = request_json.get('image', user.image)
+        password = request_json.get('password')
+        if password:
+            user.password_hash = password
         db.session.commit()
         return user.to_dict()
     elif request.method == 'DELETE':
@@ -84,7 +88,44 @@ def recommend_book():
         user = User.query.get(session['user_id'])
         user_books = UserFilteredBook.query.filter(UserFilteredBook.user_id == user.id).all()
         new_books = Book.query.filter(Book.id.notin_([user_book.book_id for user_book in user_books])).all()
-        return jsonify(rc(new_books).to_dict())
+        
+        if len(user_books) == 0:
+            response = make_response(jsonify(rc(new_books).to_dict()))
+            return response
+            
+        user_favorite_books = [Book.query.get(user_book.id) for user_book in user_books if user_book.user_favorite == True]
+        user_liked_books = [Book.query.get(user_book.id) for user_book in user_books if user_book.user_vote == True]
+        user_disliked_books = [Book.query.get(user_book.id) for user_book in user_books if user_book.user_vote == False]
+
+        user_favourite_book_connections = [BookConnection.query.filter(BookConnection.book_id == user_book.id).all() for user_book in user_favorite_books]
+        fav_book_connections_list = [book.connected_book_id for book_list in user_favourite_book_connections for book in book_list]
+
+        user_liked_book_connections = [BookConnection.query.filter(BookConnection.book_id == user_book.id).all() for user_book in user_liked_books]
+        liked_book_connections_list = [book.connected_book_id for book_list in user_liked_book_connections for book in book_list]
+
+        user_disliked_book_connections = [BookConnection.query.filter(BookConnection.book_id == user_book.id).all() for user_book in user_disliked_books]
+        disliked_book_connections_list = [book.connected_book_id for book_list in user_disliked_book_connections for book in book_list]
+
+        likes_minus_dislikes = [book for book in liked_book_connections_list if book not in disliked_book_connections_list]
+
+        positive_connections = [fav_book_connections_list + likes_minus_dislikes]
+        positive_connections_flat = [book_id for book_list in positive_connections for book_id in book_list]
+        count = Counter(tuple(positive_connections_flat))
+
+        recommendations_list = [book for book in count.most_common()]
+        user_filtered_book_ids = [user_book.book_id for user_book in user_books]
+
+        new_books_only_recommendations_list = [book for book in recommendations_list if book[0] not in user_filtered_book_ids]
+        print(len(new_books_only_recommendations_list))
+        if len(new_books_only_recommendations_list) == 0:
+            return jsonify(rc(new_books).to_dict())
+        recommendation = new_books_only_recommendations_list.pop(0)
+        print(recommendation)
+        
+        recommended_book = Book.query.get(recommendation[0])
+
+        response = make_response(jsonify(recommended_book.to_dict()))
+        return response
     
 @app.route('/user_filtered_books', methods=['GET', 'POST'])
 def user_filtered_books_index():

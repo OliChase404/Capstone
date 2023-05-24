@@ -37,7 +37,7 @@ function NavBar() {
         
         <div className="LinkContainer">
         <Link to="/" className="nav-link">Home</Link>
-        <Link to="/" className="nav-link">My Audible</Link>
+        {/* <Link to="/" className="nav-link">My Audible</Link> */}
 
         <div className="MyDataLinkContainer">
           <Link to="/mydata" className="nav-link">My Data</Link>

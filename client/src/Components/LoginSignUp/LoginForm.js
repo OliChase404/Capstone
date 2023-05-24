@@ -24,7 +24,8 @@ function LoginForm({ setUser }) {
                 <Navigate to="/" />;
               });
             } else {
-              r.json().then((err) => setErrors(err.errors));
+              r.json().then((err) => setErrors(err.errors))
+
             }
           })
           .catch((error) => console.error(error));
@@ -32,7 +33,7 @@ function LoginForm({ setUser }) {
 
 
     return (
-     <div>
+     <div className="LoginSignupForm">
         <h1>Login</h1>
         <form onSubmit={(event) => handleSubmit(event)}>
             {/* <label htmlFor="email">email</label> */}

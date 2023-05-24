@@ -34,20 +34,16 @@ function SignUpForm({ setUser }) {
     }
 
     return (
-        <div>
+        <div className="LoginSignupForm">
             <h1>SignUp</h1>
             <form onSubmit={e => handleSubmit(e)}>
-                <label htmlFor="Email">Email</label>
-                <input type="text" id="Email" onChange={e => setEmail(e.target.value)} />
+                <input type="text" placeholder="Email" id="Email" onChange={e => setEmail(e.target.value)} />
                 <br />
-                <label htmlFor="username">Username</label>
-                <input type="text" id="username" onChange={e => setUsername(e.target.value)} />
+                <input type="text" id="username" placeholder="Username" onChange={e => setUsername(e.target.value)} />
                 <br />
-                <label htmlFor="password">Password</label>
-                <input type="password" id="password" onChange={e => setPassword(e.target.value)} />
+                <input type="password" id="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
                 <br />
-                <label htmlFor="password">Confirm Password</label>
-                <input type="password" id="password" onChange={e => setPasswordConfirmation(e.target.value)} />
+                <input type="password" id="password" placeholder="Confirm Password" onChange={e => setPasswordConfirmation(e.target.value)} />
                 <br />
                 <button type="submit">SignUp</button>
             </form>
