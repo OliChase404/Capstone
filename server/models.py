@@ -63,6 +63,7 @@ class Book(db.Model, SerializerMixin):
     genres = association_proxy('book_genres', 'genre', creator=lambda g: BookGenre(genre=g))
     
     user_filtered_books = db.relationship('UserFilteredBook', back_populates='book')
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -140,8 +141,9 @@ class UserFilteredBook(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
-    user_vote = db.Column(db.Boolean)
-    user_favorite = db.Column(db.Boolean)
+    user_vote = db.Column(db.Boolean, default=False)
+    user_favorite = db.Column(db.Boolean, default=False)
+    user_skipped = db.Column(db.Boolean, default=False)
     
     user = db.relationship('User', back_populates='user_filtered_books')
     book = db.relationship('Book', back_populates='user_filtered_books')

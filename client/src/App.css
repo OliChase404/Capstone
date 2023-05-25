@@ -402,20 +402,15 @@ height: 50%;
   }
 
 .BookCard{
-  border: #ff00f288 outset 1px;
-  background-color: #0000004f;
+  border: #a200ff88 outset 1px;
+  background-color: #00000073;
   aspect-ratio: 1.6 / 1;
   width: 90%;
   max-height: 80vh;
   margin: 5%;
-  /* display: none;
-  opacity: 0; */
-  /* transition: opacity 10s ease-in-out; */
+  /* transition: all 1s ease-in-out; */
 }
-.ShowBookCard{
-  /* opacity: 1;
-  display: block; */
-}
+
 
 .BookCardUpper{
   display: flex;
