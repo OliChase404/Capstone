@@ -15,7 +15,7 @@ class User(db.Model, SerializerMixin):
     image = db.Column(db.String, default='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ficon-library.com%2Fimages%2Fdefault-user-icon%2Fdefault-user-icon-23.jpg&f=1&nofb=1&ipt=c7c95636ecb8002fe9cb243375a3a0550aa5efe053343fdfa7162b22a08f553f&ipo=images')
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
-    last_login = db.Column(db.DateTime, default=db.func.now())
+    last_active = db.Column(db.DateTime, default=db.func.now())
     
     user_filtered_books = db.relationship('UserFilteredBook', back_populates='user')
     filtered_books = association_proxy('user_filtered_books', 'book', creator=lambda b: UserFilteredBook(book=b))

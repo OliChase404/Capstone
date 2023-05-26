@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response, session
 from collections import Counter
 from random import choice as rc, sample as rs
+from datetime import datetime, timedelta
 
 from config import app, db, bcrypt
 
@@ -10,6 +11,16 @@ from models import *
 def check_session():
     if session.get('user_id'):
         user = User.query.filter(User.id == session['user_id']).first()
+
+        if datetime.now() >= user.last_active + timedelta(minutes=10):
+            user.last_active = datetime.now()
+            db.session.commit()
+            print('<---Updated last_active--->')
+            if datetime.now() >= user.last_active + timedelta(hours=8):
+                UserFilteredBook.query.filter(UserFilteredBook.user_id == user.id, UserFilteredBook.user_skipped == True).delete()
+                db.session.commit()
+                print('<---User Skipped Reset--->')
+
         return user.to_dict(), 200
     return {'error': '401 Unauthorized'}, 401
 
@@ -213,7 +224,8 @@ def unfiltered_authors_index():
     user_filtered_authors = UserFilteredAuthor.query.all()
     authors = Author.query.filter(Author.id.notin_([user_filtered_author.author_id for user_filtered_author in user_filtered_authors])).all()
     authors = sorted(authors, key=lambda author: author.name)
-    return jsonify([author.to_dict() for author in authors])
+    ten_authors = authors[:10]
+    return jsonify([author.to_dict() for author in ten_authors])
 
 @app.route('/user_disliked_authors', methods=['GET'])
 def user_disliked_authors_index():

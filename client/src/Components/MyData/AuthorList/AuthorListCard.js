@@ -1,10 +1,17 @@
 import React from "react";
+import {Draggable} from 'react-beautiful-dnd';
 
-function AuthorListCard({author}) {
+function AuthorListCard({author, index}) {
     return (
-        <div className="ListColumnCard">
-            <div>{author.name}</div>
-        </div>
+        <Draggable key={author.id} draggableId={String(author.id)} index={index}>
+            {(provided, snapshot) => {
+            return(
+                <div className="ListColumnCard" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                <div>{author.name}</div>
+            </div>
+                    )
+            }}
+        </Draggable>
     );
 }
 

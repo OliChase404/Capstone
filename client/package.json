@@ -17,6 +17,8 @@
     "react-dropzone": "^14.2.3",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
+    "react-uuid": "^2.0.0",
+    "uuid": "3.3.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
