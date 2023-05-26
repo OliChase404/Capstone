@@ -248,22 +248,41 @@ def user_favorite_authors_index():
         user_favorite_authors = [Author.query.get(user_favorite_author.author_id) for user_favorite_author in user_favorite_author_ref]
         return jsonify([user_favorite_author.to_dict() for user_favorite_author in user_favorite_authors])
 
-# @app.route('/user_filtered_authors', methods=['GET', 'POST'])
-# def user_filtered_authors_index():
-#     if request.method == 'GET':
-#         user = User.query.get(session['user_id'])
-#         user_authors = UserFilteredAuthor.query.filter(UserFilteredAuthor.user_id == user.id).all()
-#         return jsonify([user_author.to_dict() for user_author in user_authors])
-#     elif request.method == 'POST':
-#         request_json = request.get_json()
-#         user = User.query.get(session['user_id'])
-#         author = Author.query.get(request_json.get('author_id'))
-#         new_user_author = UserFilteredAuthor(
-#             user_id = user.id,
-#             author_id = author.id,
-#             user_vote = request_json.get('user_vote'),
-#             user_favorite = request_json.get('user_favorite')
-#             )
-#         db.session.add(new_user_author)
-#         db.session.commit()
-#         return new_user_author.to_dict()
+
+
+@app.route('/user_filtered_authors', methods=['GET', 'POST', 'DELETE'])
+def user_filtered_authors_index():
+    if request.method == 'GET':
+        user = User.query.get(session['user_id'])
+        user_authors = UserFilteredAuthor.query.filter(UserFilteredAuthor.user_id == user.id).all()
+        return jsonify([user_author.to_dict() for user_author in user_authors])
+    
+    elif request.method == 'POST':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        author = Author.query.get(request_json.get('author_id'))
+        existing_user_author = UserFilteredAuthor.query.filter(UserFilteredAuthor.user_id == user.id, UserFilteredAuthor.author_id == author.id).first()
+        if existing_user_author:
+            for key, value in request_json.items():
+                setattr(existing_user_author, key, value)
+            db.session.commit()
+            return existing_user_author.to_dict()
+        else:
+            new_user_author = UserFilteredAuthor(
+                user_id = user.id,
+                author_id = author.id,
+                user_vote = request_json.get('user_vote'),
+                user_favorite = request_json.get('user_favorite')
+                )
+            db.session.add(new_user_author)
+            db.session.commit()
+        return new_user_author.to_dict()
+    
+    elif request.method == 'DELETE':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        author_id = request_json.get('author_id')
+        user_author = UserFilteredAuthor.query.filter(UserFilteredAuthor.user_id == user.id, UserFilteredAuthor.author_id == author_id).first()
+        db.session.delete(user_author)
+        db.session.commit()
+        return user_author.to_dict()

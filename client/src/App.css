@@ -615,7 +615,6 @@ height: 50%;
   font-weight: bold;
   cursor: pointer;
 }
-
 .ListHeader{
   display: flex;
   flex-direction: row;
@@ -626,30 +625,73 @@ height: 50%;
   margin: 0%;
 }
 
+.ListColumnPrimary{
+  border: #ff000063 solid 2px;
+  aspect-ratio: 1 / 1;
+  background-color: #0000004f;
+  margin: 2%;
+  height: 84vh;
+  max-height: 90%;
+  width: 95%;
+  padding: 5px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-color: rgba(204, 0, 255, 0.568) rgba(0, 0, 0, 0.486);
+  scrollbar-width: thin;
+}
+
+.ListColumnContainer{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 90%;
+}
 .ListColumn{
   display: flex;
   flex-direction: column;
   width: 23%;
   height: 95%;
-  margin: 0%;
-  padding: 0%;
   border: #00000063 solid 2px;
   background-color: #0000004f;
   text-align: left;
   overflow-x: hidden;
   overflow-y: scroll;
-
+}
+.ListColumnDragOver{
+  display: flex;
+  flex-direction: column;
+  width: 23%;
+  height: 95%;
+  border: #00f7ff solid 2px;
+  background-color: #00eeffc4;
+  text-align: left;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .ListColumnCard{
+user-select: none;
 margin-left: 3%;
 margin-right: 3%;
 margin-top: 2%;
 margin-bottom: 3%;
-padding: 5%;
+font-weight: bold;
+padding: 4%;
 border: #00000063 solid 2px;
-background-color: #0077ff5e;
+background-color: #00b7ffbb;
 }
+.ListColumnCardDragging{
+  user-select: none;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding: 2%;
+  border: #00000063 solid 2px;
+  background-color: #cc00ffc9;
+  }
 
 
 .MyDataLink{

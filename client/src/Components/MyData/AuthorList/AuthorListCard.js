@@ -6,7 +6,7 @@ function AuthorListCard({author, index}) {
         <Draggable key={author.id} draggableId={String(author.id)} index={index}>
             {(provided, snapshot) => {
             return(
-                <div className="ListColumnCard" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                <div className={snapshot.isDragging ? "ListColumnCardDragging" : "ListColumnCard"} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                 <div>{author.name}</div>
             </div>
                     )

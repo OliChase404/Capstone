@@ -3,7 +3,7 @@ import AuthorListContainer from "./AuthorListContainer";
 
 function AuthorList() {
     return (
-        <div >
+        <div className="ListColumnPrimary" >
             <h1>AuthorList</h1>
             <div className="ListHeader">
                 <h2>Unfiltered Authors</h2>
