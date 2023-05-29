@@ -21,17 +21,18 @@ function BookCard(){
     }, [])
     
     function next(){
-      if (bookQueue.length <= 6) {
+      if (bookQueue.length <= 10) {
         getBooks()
       }
-      setBook(bookQueue[0])
       const updatedQueue = bookQueue.slice(1)
       setBookQueue(updatedQueue)
+      setBook(bookQueue[0])
       setLoading(false)
       console.log(bookQueue)
     }
 
     function getBooks() {
+      // setLoading(true)
       fetch("/recommend_books")
       .then(res => res.json())
       .then(books => {
@@ -47,7 +48,8 @@ function BookCard(){
         .replace(/,([a-z])/g, ', $1')
         return {...book, summary: processedSummary}
       })
-      setBookQueue([...processedBooks])
+      setBookQueue(processedBooks)
+      // setLoading(false)
       }
     
     

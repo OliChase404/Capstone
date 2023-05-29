@@ -138,14 +138,14 @@ def recommend_book():
             print('<---new_books_only_recommendations_list is empty--->')
             return jsonify([book.to_dict() for book in ten_random_books])
         
-        recommendation_tuples = new_books_only_recommendations_list[:10]
+        recommendation_tuples = new_books_only_recommendations_list[:30]
         print(recommendation_tuples)
 
         recommendation_ids = [recommendation[0] for recommendation in recommendation_tuples]
         recommendation_ids = list(set(recommendation_ids))
 
         i = 0
-        while (len(recommendation_ids) < 10) and (i < 100):
+        while (len(recommendation_ids) < 30) and (i < 100):
             random_new_book = rc(new_books)
             if random_new_book.id not in recommendation_ids:
                 recommendation_ids.append(random_new_book.id)
@@ -224,8 +224,8 @@ def unfiltered_authors_index():
     user_filtered_authors = UserFilteredAuthor.query.all()
     authors = Author.query.filter(Author.id.notin_([user_filtered_author.author_id for user_filtered_author in user_filtered_authors])).all()
     authors = sorted(authors, key=lambda author: author.name)
-    ten_authors = authors[:10]
-    return jsonify([author.to_dict() for author in ten_authors])
+    # ten_authors = authors[:10]
+    return jsonify([author.to_dict() for author in authors])
 
 @app.route('/user_disliked_authors', methods=['GET'])
 def user_disliked_authors_index():

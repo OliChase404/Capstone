@@ -38,9 +38,9 @@ function MyProfile() {
     function uploadImage() {
       const formData = new FormData();
       formData.append("file", files[0]);
-      formData.append("upload_preset", "cdhcqpsu");
+      formData.append("upload_preset", "DeepReads");
       Axios.post(
-        "https://api.cloudinary.com/v1_1/dslclh67l/image/upload",
+        "https://api.cloudinary.com/v1_1/deepreadscloud/image/upload",
         formData
       ).then((response) => {
         setImageUrl(response.data.url)

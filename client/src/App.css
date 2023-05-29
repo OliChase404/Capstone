@@ -618,11 +618,27 @@ height: 50%;
 .ListHeader{
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
   width: 100%;
 }
 .ListHeader h2{
-  width: 25%;
+  width: 23%;
   margin: 0%;
+}
+.ListHeader input{
+  /* display: flex; */
+  width: 21%;
+  margin: 0%;
+  margin-top: 1%;
+  background-color: #0000004f;
+  font-family: 'Raleway', sans-serif;
+  color: white;
+}
+.ListHeader input:focus{
+  background-color: #04eeffdc;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  border: rebeccapurple solid 2px;
 }
 
 .ListColumnPrimary{
@@ -673,6 +689,7 @@ height: 50%;
 }
 
 .ListColumnCard{
+
 user-select: none;
 margin-left: 3%;
 margin-right: 3%;
