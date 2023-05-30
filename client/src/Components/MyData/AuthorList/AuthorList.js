@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
-import AuthorListCard from "./AuthorListCard";
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import { binarySearch } from "../../Tools";
 import AuthorListContainer from "./AuthorListContainer";
 
@@ -16,14 +14,10 @@ function AuthorList() {
     const [dislikedAuthors, setDislikedAuthors] = useState([])
     const [favoriteAuthors, setFavoriteAuthors] = useState([])
 
-
-
     useEffect(() => {
         fetch('/unfiltered_authors')
             .then(res => res.json())
-            .then(data => {
-                setUnfilteredAuthors(data)
-            })
+            .then(data => setUnfilteredAuthors(data))
         fetch('/user_liked_authors')
             .then(res => res.json())
             .then(data => setLikedAuthors(data))
@@ -36,9 +30,7 @@ function AuthorList() {
 
     },[])
 
-
     const unfilteredToDisplay = binarySearch(unfilteredAuthors, search)
-
 
     function handleOnDragEnd(result) {
         if (!result.destination) return
@@ -59,7 +51,6 @@ function AuthorList() {
       
         setList(sourceListId, updatedSourceList)
         setList(destinationListId, destinationList)
-
         
         if (destinationListId !== 'unfilteredAuthors') {
             let user_vote = false
@@ -96,9 +87,6 @@ function AuthorList() {
                 })
             })
         }
-        
-        // console.log(result.draggableId)
-        // console.log(result.destination.droppableId)
       }
       
       function getList(listId) {

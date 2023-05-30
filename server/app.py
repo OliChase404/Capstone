@@ -213,6 +213,11 @@ def user_book_show(id):
         return user_book.to_dict()
 
 
+
+
+
+
+
 @app.route('/authors', methods=['GET'])
 def authors_index():
     authors = Author.query.all()
@@ -224,7 +229,6 @@ def unfiltered_authors_index():
     user_filtered_authors = UserFilteredAuthor.query.all()
     authors = Author.query.filter(Author.id.notin_([user_filtered_author.author_id for user_filtered_author in user_filtered_authors])).all()
     authors = sorted(authors, key=lambda author: author.name)
-    # ten_authors = authors[:10]
     return jsonify([author.to_dict() for author in authors])
 
 @app.route('/user_disliked_authors', methods=['GET'])
@@ -247,8 +251,6 @@ def user_favorite_authors_index():
         user_favorite_author_ref = UserFilteredAuthor.query.filter(UserFilteredAuthor.user_id == user.id, UserFilteredAuthor.user_favorite == True).all()
         user_favorite_authors = [Author.query.get(user_favorite_author.author_id) for user_favorite_author in user_favorite_author_ref]
         return jsonify([user_favorite_author.to_dict() for user_favorite_author in user_favorite_authors])
-
-
 
 @app.route('/user_filtered_authors', methods=['GET', 'POST', 'DELETE'])
 def user_filtered_authors_index():
@@ -286,3 +288,153 @@ def user_filtered_authors_index():
         db.session.delete(user_author)
         db.session.commit()
         return user_author.to_dict()
+
+
+
+
+
+@app.route('/genres', methods=['GET'])
+def genres_index():
+    genres = Genre.query.all()
+    genres = sorted(genres, key=lambda genre: genre.name)
+    return jsonify([genre.to_dict() for genre in genres])
+
+@app.route('/unfiltered_genres', methods=['GET'])
+def unfiltered_genres_index():
+    user_filtered_genres = UserFilteredGenre.query.all()
+    genres = Genre.query.filter(Genre.id.notin_([user_filtered_genre.genre_id for user_filtered_genre in user_filtered_genres])).all()
+    genres = sorted(genres, key=lambda genre: genre.name)
+    return jsonify([genre.to_dict() for genre in genres])
+
+@app.route('/user_disliked_genres', methods=['GET'])
+def user_disliked_genres_index():
+        user = User.query.get(session['user_id'])
+        user_disliked_genre_ref = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id, UserFilteredGenre.user_vote == False, UserFilteredGenre.user_favorite == False).all()
+        user_disliked_genres = [Genre.query.get(user_disliked_genre.genre_id) for user_disliked_genre in user_disliked_genre_ref]
+        return jsonify([user_disliked_genre.to_dict() for user_disliked_genre in user_disliked_genres])
+
+@app.route('/user_liked_genres', methods=['GET'])
+def user_liked_genres_index():
+        user = User.query.get(session['user_id'])
+        user_liked_genre_ref = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id, UserFilteredGenre.user_vote == True, UserFilteredGenre.user_favorite == False).all()
+        user_liked_genres = [Genre.query.get(user_liked_genre.genre_id) for user_liked_genre in user_liked_genre_ref]
+        return jsonify([user_liked_genre.to_dict() for user_liked_genre in user_liked_genres])
+
+@app.route('/user_favorite_genres', methods=['GET'])
+def user_favorite_genres_index():
+        user = User.query.get(session['user_id'])
+        user_favorite_genre_ref = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id, UserFilteredGenre.user_favorite == True).all()
+        user_favorite_genres = [Genre.query.get(user_favorite_genre.genre_id) for user_favorite_genre in user_favorite_genre_ref]
+        return jsonify([user_favorite_genre.to_dict() for user_favorite_genre in user_favorite_genres])
+
+@app.route('/user_filtered_genres', methods=['GET', 'POST', 'DELETE'])
+def user_filtered_genres_index():
+    if request.method == 'GET':
+        user = User.query.get(session['user_id'])
+        user_filtered_genres = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id).all()
+        return jsonify([user_genre.to_dict() for user_genre in user_filtered_genres])
+    
+    elif request.method == 'POST':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        genre = Genre.query.get(request_json.get('genre_id'))
+        existing_user_genre = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id, UserFilteredGenre.genre_id == genre.id).first()
+        if existing_user_genre:
+            for key, value in request_json.items():
+                setattr(existing_user_genre, key, value)
+            db.session.commit()
+            return existing_user_genre.to_dict()
+        else:
+            new_user_genre = UserFilteredGenre(
+                user_id = user.id,
+                genre_id = genre.id,
+                user_vote = request_json.get('user_vote'),
+                user_favorite = request_json.get('user_favorite')
+                )
+            db.session.add(new_user_genre)
+            db.session.commit()
+        return new_user_genre.to_dict()
+    
+    elif request.method == 'DELETE':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        genre_id = request_json.get('genre_id')
+        user_genre = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id, UserFilteredGenre.genre_id == genre_id).first()
+        db.session.delete(user_genre)
+        db.session.commit()
+        return user_genre.to_dict()
+    
+
+
+
+
+@app.route('/narrators', methods=['GET'])
+def narrators_index():
+    narrators = Narrator.query.all()
+    narrators = sorted(narrators, key=lambda narrator: narrator.name)
+    return jsonify([narrator.to_dict() for narrator in narrators])
+
+@app.route('/unfiltered_narrators', methods=['GET'])
+def unfiltered_narrators_index():
+    user_filtered_narrators = UserFilteredNarrator.query.all()
+    narrators = Narrator.query.filter(Narrator.id.notin_([user_filtered_narrator.narrator_id for user_filtered_narrator in user_filtered_narrators])).all()
+    narrators = sorted(narrators, key=lambda narrator: narrator.name)
+    return jsonify([narrator.to_dict() for narrator in narrators])
+
+@app.route('/user_disliked_narrators', methods=['GET'])
+def user_disliked_narrators_index():
+        user = User.query.get(session['user_id'])
+        user_disliked_narrator_ref = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id, UserFilteredNarrator.user_vote == False, UserFilteredNarrator.user_favorite == False).all()
+        user_disliked_narrators = [Narrator.query.get(user_disliked_narrator.narrator_id) for user_disliked_narrator in user_disliked_narrator_ref]
+        return jsonify([user_disliked_narrator.to_dict() for user_disliked_narrator in user_disliked_narrators])
+
+@app.route('/user_liked_narrators', methods=['GET'])
+def user_liked_narrators_index():
+        user = User.query.get(session['user_id'])
+        user_liked_narrator_ref = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id, UserFilteredNarrator.user_vote == True, UserFilteredNarrator.user_favorite == False).all()
+        user_liked_narrators = [Narrator.query.get(user_liked_narrator.narrator_id) for user_liked_narrator in user_liked_narrator_ref]
+        return jsonify([user_liked_narrator.to_dict() for user_liked_narrator in user_liked_narrators])
+
+@app.route('/user_favorite_narrators', methods=['GET'])
+def user_favorite_narrators_index():
+        user = User.query.get(session['user_id'])
+        user_favorite_narrator_ref = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id, UserFilteredNarrator.user_favorite == True).all()
+        user_favorite_narrators = [Narrator.query.get(user_favorite_narrator.narrator_id) for user_favorite_narrator in user_favorite_narrator_ref]
+        return jsonify([user_favorite_narrator.to_dict() for user_favorite_narrator in user_favorite_narrators])
+
+@app.route('/user_filtered_narrators', methods=['GET', 'POST', 'DELETE'])
+def user_filtered_narrators_index():
+    if request.method == 'GET':
+        user = User.query.get(session['user_id'])
+        user_narrators = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id).all()
+        return jsonify([user_narrator.to_dict() for user_narrator in user_narrators])
+    
+    elif request.method == 'POST':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        narrator = Narrator.query.get(request_json.get('narrator_id'))
+        existing_user_narrator = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id, UserFilteredNarrator.narrator_id == narrator.id).first()
+        if existing_user_narrator:
+            for key, value in request_json.items():
+                setattr(existing_user_narrator, key, value)
+            db.session.commit()
+            return existing_user_narrator.to_dict()
+        else:
+            new_user_narrator = UserFilteredNarrator(
+                user_id = user.id,
+                narrator_id = narrator.id,
+                user_vote = request_json.get('user_vote'),
+                user_favorite = request_json.get('user_favorite')
+                )
+            db.session.add(new_user_narrator)
+            db.session.commit()
+        return new_user_narrator.to_dict()
+    
+    elif request.method == 'DELETE':
+        request_json = request.get_json()
+        user = User.query.get(session['user_id'])
+        narrator_id = request_json.get('narrator_id')
+        user_narrator = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id, UserFilteredNarrator.narrator_id == narrator_id).first()
+        db.session.delete(user_narrator)
+        db.session.commit()
+        return user_narrator.to_dict()

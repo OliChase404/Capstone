@@ -1,22 +1,22 @@
 import React from "react";
-import AuthorListCard from "./AuthorListCard";
+import GenreListCard from "./GenreListCard";
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import { List } from 'react-virtualized';
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ - Maybe implement this for performance
 
-function AuthorListContainer({ unfilteredAuthors, likedAuthors, dislikedAuthors, favoriteAuthors, handleOnDragEnd, setSearch}) {
+function GenreListContainer({ unfilteredGenres, likedGenres, dislikedGenres, favoriteGenres, handleOnDragEnd, setSearch}) {
 
-    const renderUnfilteredAuthors = unfilteredAuthors.slice(0, 100).map((unfilteredAuthor, index) => {
-        return <AuthorListCard key={unfilteredAuthor.id} author={unfilteredAuthor} index={index}/>
+    const renderUnfilteredGenres = unfilteredGenres.slice(0, 100).map((unfilteredGenre, index) => {
+        return <GenreListCard key={unfilteredGenre.id} genre={unfilteredGenre} index={index}/>
       })
-    const renderLikedAuthors = likedAuthors.map((likedAuthor, index) => {
-        return <AuthorListCard key={likedAuthor.id} author={likedAuthor} index={index}/>
+    const renderLikedGenres = likedGenres.map((likedGenre, index) => {
+        return <GenreListCard key={likedGenre.id} genre={likedGenre} index={index}/>
         })
-    const renderDislikedAuthors = dislikedAuthors.map((dislikedAuthor, index) => {
-        return <AuthorListCard key={dislikedAuthor.id} author={dislikedAuthor} index={index}/>   
+    const renderDislikedGenres = dislikedGenres.map((dislikedGenre, index) => {
+        return <GenreListCard key={dislikedGenre.id} genre={dislikedGenre} index={index}/>   
         })
-    const renderFavoriteAuthors = favoriteAuthors.map((favoriteAuthor, index) => {
-        return <AuthorListCard key={favoriteAuthor.id} author={favoriteAuthor} index={index}/>
+    const renderFavoriteGenres = favoriteGenres.map((favoriteGenre, index) => {
+        return <GenreListCard key={favoriteGenre.id} genre={favoriteGenre} index={index}/>
         })
 
         function searchUnfiltered(event) {
@@ -29,34 +29,34 @@ function AuthorListContainer({ unfilteredAuthors, likedAuthors, dislikedAuthors,
                 <input onChange={(event) => searchUnfiltered(event)} type="text" placeholder="Search..."/>
             </div>
             <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
-                <Droppable droppableId="unfilteredAuthors">
+                <Droppable droppableId="unfilteredGenres">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderUnfilteredAuthors}
+                            {renderUnfilteredGenres}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
-                <Droppable droppableId="dislikedAuthors">
+                <Droppable droppableId="dislikedGenres">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderDislikedAuthors}
+                            {renderDislikedGenres}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
-                <Droppable droppableId="likedAuthors">
+                <Droppable droppableId="likedGenres">
                 {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderLikedAuthors}
+                            {renderLikedGenres}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
-                <Droppable droppableId="favoriteAuthors">
+                <Droppable droppableId="favoriteGenres">
                 {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderFavoriteAuthors}
+                            {renderFavoriteGenres}
                             {provided.placeholder}
                         </div>
                     )}
@@ -66,4 +66,4 @@ function AuthorListContainer({ unfilteredAuthors, likedAuthors, dislikedAuthors,
     );
 }
 
-export default AuthorListContainer;
+export default GenreListContainer

@@ -9,6 +9,10 @@ function BookCard(){
     const [bookQueue, setBookQueue] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const [userFilteredGenres, setUserFilteredGenres] = useState([])
+    const [userFilteredAuthors, setUserFilteredAuthors] = useState([])
+    const [userFilteredNarrators, setUserFilteredNarrators] = useState([])
+
     useEffect(() => {
       fetch("/recommend_books")
       .then(res => res.json())
@@ -18,6 +22,18 @@ function BookCard(){
         setLoading(false)
         getBooks()
       })
+
+      fetch(`/user_filtered_genres`)
+      .then(res => res.json())
+      .then(genres => setUserFilteredGenres(genres))
+
+      fetch(`/user_filtered_authors`)
+      .then(res => res.json())
+      .then(authors => setUserFilteredAuthors(authors))
+
+      fetch(`/user_filtered_narrators`)
+      .then(res => res.json())
+      .then(narrators => setUserFilteredNarrators(narrators))
     }, [])
     
     function next(){
@@ -28,7 +44,7 @@ function BookCard(){
       setBookQueue(updatedQueue)
       setBook(bookQueue[0])
       setLoading(false)
-      console.log(bookQueue)
+      // console.log(bookQueue)
     }
 
     function getBooks() {
@@ -47,10 +63,10 @@ function BookCard(){
         .replace(/,([A-Z])/g, ', $1')
         .replace(/,([a-z])/g, ', $1')
         return {...book, summary: processedSummary}
+
       })
-      setBookQueue(processedBooks)
-      // setLoading(false)
       }
+    
     
     
     function handleFavorite(){
@@ -116,11 +132,85 @@ function BookCard(){
                 })
             }).then(() => next())
           }
+      
 
-    // const renderGenres = book.genres.map(genre => {
-    //   return <p>genre.name</p>
-    // })
-    // console.log(book)
+      const favGenres = []
+      const LikedGenres = []
+      const DislikedGenres = []
+
+      if (userFilteredGenres) {
+        for (const genre of userFilteredGenres) {
+          if (genre.user_favorite) {
+            favGenres.push(genre.genre_id)
+          } else if (genre.user_vote) {
+            LikedGenres.push(genre.genre_id)
+          } else if (!genre.user_vote) {
+            DislikedGenres.push(genre.genre_id)
+          }
+        }
+      }
+
+      let renderGenres = []
+      if (book.genres){
+        renderGenres = book.genres.map(genre => {
+          return (
+          <p 
+          key={genre.genre_id} 
+          onClick={() => toggleGenre(genre.genre.id)}
+          className={favGenres.includes(genre.genre.id) ?
+          "GenreTagFav" : LikedGenres.includes(genre.genre.id) ? 
+          "GenreTagLike" : DislikedGenres.includes(genre.genre.id) ?
+          "GenreTagDislike" : ""} >
+            {genre.genre.name}
+          </p>
+          )
+        })
+      }
+    function toggleGenre(Id){
+      let fav = false
+      let vote = false
+      if (favGenres.includes(Id)) {
+        fetch(`/user_filtered_genres`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: user.id,
+            genre_id: Id
+          })
+        }).then(() => {
+          fetch(`/user_filtered_genres`)
+          .then(res => res.json())
+          .then(genres => setUserFilteredGenres(genres))
+        })
+        return
+      }
+      if (LikedGenres.includes(Id)) {
+        vote = true
+        fav = true
+      }
+      if (DislikedGenres.includes(Id)) {
+        vote = true
+      }
+      fetch(`/user_filtered_genres`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          genre_id: Id,
+          user_vote: vote,
+          user_favorite: fav,
+        })
+      }).then(() => {
+        fetch(`/user_filtered_genres`)
+        .then(res => res.json())
+        .then(genres => setUserFilteredGenres(genres))
+      })
+  }
+
 
     return(
       <div>
@@ -130,12 +220,13 @@ function BookCard(){
                 <div className="BookCardUpperLeft">
                     <img src={book.cover} alt="Book Cover" />
                     <AudioPlayer src={book.sample} />
-
+                    <div className="GenreTagContainer">
+                    {renderGenres}
+                    </div>
                 </div>
                 <div className="BookCardUpperRight">
                     <h1>{book.title}</h1>
                     <h2>By {book.author} - Read By {book.narrator}</h2>
-                    {/* {book[genres][0][genre][name]} */}
                     <p>{book.summary}</p>
                 </div>
 

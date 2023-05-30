@@ -1,22 +1,22 @@
 import React from "react";
-import AuthorListCard from "./AuthorListCard";
+import NarratorListCard from "./NarratorListCard";
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import { List } from 'react-virtualized';
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ - Maybe implement this for performance
 
-function AuthorListContainer({ unfilteredAuthors, likedAuthors, dislikedAuthors, favoriteAuthors, handleOnDragEnd, setSearch}) {
+function NarratorListContainer({ unfilteredNarrators, likedNarrators, dislikedNarrators, favoriteNarrators, handleOnDragEnd, setSearch}) {
 
-    const renderUnfilteredAuthors = unfilteredAuthors.slice(0, 100).map((unfilteredAuthor, index) => {
-        return <AuthorListCard key={unfilteredAuthor.id} author={unfilteredAuthor} index={index}/>
+    const renderUnfilteredNarrators = unfilteredNarrators.slice(0, 100).map((unfilteredNarrator, index) => {
+        return <NarratorListCard key={unfilteredNarrator.id} narrator={unfilteredNarrator} index={index}/>
       })
-    const renderLikedAuthors = likedAuthors.map((likedAuthor, index) => {
-        return <AuthorListCard key={likedAuthor.id} author={likedAuthor} index={index}/>
+    const renderLikedNarrators = likedNarrators.map((likedNarrator, index) => {
+        return <NarratorListCard key={likedNarrator.id} narrator={likedNarrator} index={index}/>
         })
-    const renderDislikedAuthors = dislikedAuthors.map((dislikedAuthor, index) => {
-        return <AuthorListCard key={dislikedAuthor.id} author={dislikedAuthor} index={index}/>   
+    const renderDislikedNarrators = dislikedNarrators.map((dislikedNarrator, index) => {
+        return <NarratorListCard key={dislikedNarrator.id} narrator={dislikedNarrator} index={index}/>   
         })
-    const renderFavoriteAuthors = favoriteAuthors.map((favoriteAuthor, index) => {
-        return <AuthorListCard key={favoriteAuthor.id} author={favoriteAuthor} index={index}/>
+    const renderFavoriteNarrators = favoriteNarrators.map((favoriteNarrator, index) => {
+        return <NarratorListCard key={favoriteNarrator.id} narrator={favoriteNarrator} index={index}/>
         })
 
         function searchUnfiltered(event) {
@@ -29,34 +29,34 @@ function AuthorListContainer({ unfilteredAuthors, likedAuthors, dislikedAuthors,
                 <input onChange={(event) => searchUnfiltered(event)} type="text" placeholder="Search..."/>
             </div>
             <DragDropContext onDragEnd={(result) => handleOnDragEnd(result)}>
-                <Droppable droppableId="unfilteredAuthors">
+                <Droppable droppableId="unfilteredNarrators">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderUnfilteredAuthors}
+                            {renderUnfilteredNarrators}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
-                <Droppable droppableId="dislikedAuthors">
+                <Droppable droppableId="dislikedNarrators">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderDislikedAuthors}
+                            {renderDislikedNarrators}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
-                <Droppable droppableId="likedAuthors">
+                <Droppable droppableId="likedNarrators">
                 {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderLikedAuthors}
+                            {renderLikedNarrators}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
-                <Droppable droppableId="favoriteAuthors">
+                <Droppable droppableId="favoriteNarrators">
                 {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? "ListColumnDragOver" : "ListColumn"}>
-                            {renderFavoriteAuthors}
+                            {renderFavoriteNarrators}
                             {provided.placeholder}
                         </div>
                     )}
@@ -66,4 +66,4 @@ function AuthorListContainer({ unfilteredAuthors, likedAuthors, dislikedAuthors,
     );
 }
 
-export default AuthorListContainer;
+export default NarratorListContainer;
