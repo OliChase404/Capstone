@@ -12,9 +12,9 @@
 }
 
 body{
-  /* background-color: blueviolet; */
-  background: radial-gradient(ellipse at 50% 50%, rgb(57, 0, 148), rgb(23, 2, 44));
-  /* background-image: url('assets/christian-mackie-cc0Gg3BegjE-unsplash.jpg'); */
+  background-image: radial-gradient(ellipse at 50% 50%, rgba(57, 0, 148, 0.507), rgb(23, 2, 44)), url('../public/Assets/inaki-del-olmo-NIJuEQw0RKg-unsplash.jpg');
+  /* background: radial-gradient(ellipse at 50% 50%, rgb(57, 0, 148), rgb(23, 2, 44)); */
+  /* background-image: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('your-image.jpg'); */
   background-repeat: no-repeat;
   background-attachment:fixed ;
   background-size: cover;
@@ -23,9 +23,6 @@ body{
   margin-top: 8vh;
   overflow-x: hidden;
   overflow-y: hidden;
-  
-  /* text-align: center; */
-  
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
@@ -50,6 +47,7 @@ input:-webkit-autofill{
   position: fixed;
   top: 0px;
   width: 100%;
+  max-width: 160vh;
   z-index: 1;
   user-select: none;
   /* margin-bottom: 100px; */
@@ -211,10 +209,11 @@ input:-webkit-autofill{
   position: absolute;
   top: 1vh;
   left: 0;
-  width: 400px;
+  width: 450px;
   height: 100px;
   z-index: 0.1;
   user-select: none;
+  /* text-shadow: #00000017 0px 0px 1px; */
 }
 
 svg {
@@ -234,33 +233,33 @@ svg {
   stroke-dasharray: 6% 29%;
   stroke-width: 2px;
   stroke-dashoffset: 0%;
-  animation: stroke-offset 11s infinite linear;
+  animation: stroke-offset 25s infinite linear;
   user-select: none;
 }
 
 .text-copy:nth-child(1){
-  stroke: #ff00b7c0;
+  stroke: #ff00b7;
   animation-delay: -1;
 }
 
 .text-copy:nth-child(2){
-  stroke: #ff006ae0;
-  animation-delay: -2s;
+  stroke: #b700ff;
+  animation-delay: -5s;
 }
 
 .text-copy:nth-child(3){
-  stroke: #a0002d;
-  animation-delay: -3s;
+  stroke: #fdc55c;
+  animation-delay: -10s;
 }
 
 .text-copy:nth-child(4){
   stroke: #00f7ff;
-  animation-delay: -4s;
+  animation-delay: -15s;
 }
 
 .text-copy:nth-child(5){
-  stroke: rgba(255, 38, 0, 0.877);
-  animation-delay: -5s;
+  stroke: rgb(255, 0, 0);
+  animation-delay: -20s;
 }
 
 @keyframes stroke-offset{
@@ -308,10 +307,10 @@ height: 50%;
 
   .ProfilePageInfo div{
     border: #000000dc solid 1px;
-    background-color: #0000004f;
+    background-color: #000000bb;
     padding: 2%;
     margin-bottom: 6%;
-    font-weight: normal;
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
   }
@@ -403,15 +402,14 @@ height: 50%;
 
 .BookCard{
   border: #a200ff88 outset 1px;
-  background-color: #00000073;
+  background-color: #000000a1;
+  text-shadow: #000000 0px 0px 10px;
   aspect-ratio: 3 / 2;
   width: 94%;
   max-height: 80vh;
   margin: 3%;
   /* transition: all 1s ease-in-out; */
 }
-
-
 .BookCardUpper{
   display: flex;
   flex-direction: row;
@@ -427,6 +425,14 @@ height: 50%;
 .BookCardUpperLeft img {
   margin-bottom: 1%;
 }
+.GenreTagContainerHeading{
+  width: 100%;
+  margin-top: 3%;
+  margin-bottom: 0%;
+  font-size: medium;
+  font-weight: bolder !important;
+  color: #ae00ff;
+}
 .GenreTagContainer{
   width: 100%;
   margin-top: 1%;
@@ -441,6 +447,7 @@ height: 50%;
   scrollbar-width: thin;
 }
 .GenreTagContainer p{
+  user-select: none;
   margin: 1%;
   padding: 1%;
   border: #0077ff outset 2px;
@@ -484,18 +491,92 @@ height: 50%;
   width: 70%;
 }
 .BookCardUpperRight h1{
-  margin-top: 2%;
+  margin-top: 3%;
   margin-bottom: 0%;
   padding: 0%;
-  font-weight: normal;
+  font-weight: bold;
+  /* box-shadow: #000000 0px 0px 10px 0px; */
+  text-shadow: #cc00ffc0 0px 0px 10px;
 }
-.BookCardUpperRight h2{
+
+
+.AuthorNarratorContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   margin-top: 2%;
   margin-bottom: 0%;
   padding: 0%;
   font-weight: normal;
   font-size: large;
 }
+.AuthorNarrator{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  max-width: 40%;
+  /* margin-left: 10%; */
+  /* margin-right: 10%; */
+}
+.AuthorNarrator p{
+  height: 30%;
+  width: 100%;
+  font-weight: bolder !important;
+  color: #ae00ff;
+  overflow: hidden;
+}
+.AuthorNarratorTag{
+  font-weight: bold;
+  user-select: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 40%;
+  width: 90%;
+  white-space: nowrap;
+  /* margin: 0%; */
+  padding: 2%;
+  border: #0077ff outset 2px;
+  background-color: #00000073;
+  color: #ffffff;
+  font-size: medium;
+  /* font-weight: normal; */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  /* overflow: hidden; */
+}
+.AuthorNarratorTag:hover{
+  background-color: #0077ff;
+  box-shadow: #0077ff 0px 0px 10px 0px;
+}
+.AuthorNarratorTagFav{
+  border: #ff00ffe3 outset 2px !important;
+}
+.AuthorNarratorTagFav:hover{
+  background-color: #ff00ff !important;
+  box-shadow: #ff00ff 0px 0px 10px 0px !important;
+}
+.AuthorNarratorTagLiked{
+  border: #00ff00d8 outset 2px !important;
+}
+.AuthorNarratorTagLiked:hover{
+  background-color: #00ff00 !important;
+  box-shadow: #00ff00 0px 0px 10px 0px !important;
+}
+.AuthorNarratorTagDisliked{
+  border: #ff0000e1 outset 2px !important;
+}
+.AuthorNarratorTagDisliked:hover{
+  background-color: #ff0000 !important;
+  box-shadow: #ff0000 0px 0px 10px 0px !important;
+}
+
+
+
 .BookCardUpperRight p{
   margin-top: 2%;
   margin-bottom: 0%;

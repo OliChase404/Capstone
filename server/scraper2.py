@@ -305,10 +305,10 @@ if __name__ == '__main__':
         # get_book_from_audible('https://www.audible.com/pd/Lord-of-the-Flies-Audiobook/B002V8KNLK?plink=sBZvhFzWsxDnUrqR&ref=a_pd_Catch-_c5_adblp13npsbx_1_4&pf_rd_p=4c082384-61f5-4e24-ad12-0ecfce1ecd31&pf_rd_r=HKAM968NE1GVY9R3MMMB&pageLoadId=yh1JfXtnCrKJ4BfW&creativeId=4a11ed03-ceae-4b57-9974-9953fec40565')
 
 
-        # unprocessed_books = Book.query.filter_by(processed=False).all()
-        # for book in unprocessed_books:
-        #     print('getting connected books for ' + book.title + '...')
-        #     get_connected_books(book)
-        #     book.processed = True
-        #     db.session.commit()
+        unprocessed_books = Book.query.filter_by(processed=False).all()
+        for book in unprocessed_books:
+            print('getting connected books for ' + book.title + '...')
+            get_connected_books(book)
+            book.processed = True
+            db.session.commit()
 

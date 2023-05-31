@@ -92,27 +92,36 @@ def books_show(id):
         book_genres = [Genre.query.get(book_genre.genre_id) for book_genre in book_genres_link]
         return jsonify(book.to_dict())
     
+
+
+def fall_back_random_books(int):
+    new_books = Book.query.all()
+    fall_back_random_books = []
+    while len(fall_back_random_books) < int:
+        random_book = rc(new_books)
+        if random_book not in fall_back_random_books:
+            fall_back_random_books.append(random_book)
+    return fall_back_random_books
+    
 @app.route('/recommend_books', methods=['GET'])
 def recommend_book():
     if request.method == 'GET':
         user = User.query.get(session['user_id'])
         user_filtered_books = UserFilteredBook.query.filter(UserFilteredBook.user_id == user.id).all()
         new_books = Book.query.filter(Book.id.notin_([user_book.book_id for user_book in user_filtered_books])).all()
-
-        ten_random_books = []
-        while len(ten_random_books) < 10:
-            random_book = rc(new_books)
-            if random_book not in ten_random_books:
-                ten_random_books.append(random_book)
         
+        # Catch User with no data, probably new user----------------
         if len(user_filtered_books) == 0:
+            fall_back = fall_back_random_books(20)
             print('<---user has no filtered books--->')
-            return jsonify([book.to_dict() for book in ten_random_books])
+            return jsonify([book.to_dict() for book in fall_back])
+        #-------------------------------------------------------
 
         user_favorite_books = [user_book for user_book in user_filtered_books if user_book.user_favorite == True]
         user_liked_books = [user_book for user_book in user_filtered_books if user_book.user_vote == True]
         user_disliked_books = [user_book for user_book in user_filtered_books if user_book.user_vote == False and user_book.user_skipped == False]
 
+        #Gather and sort connections for user filtered books
         user_favourite_book_connections = [BookConnection.query.filter(BookConnection.book_id == user_book.id).all() for user_book in user_favorite_books]
         fav_book_connections_list = [book.connected_book_id for book_list in user_favourite_book_connections for book in book_list]
 
@@ -135,8 +144,9 @@ def recommend_book():
         print(len(new_books_only_recommendations_list))
 
         if len(new_books_only_recommendations_list) == 0:
+            fall_back = fall_back_random_books(20)
             print('<---new_books_only_recommendations_list is empty--->')
-            return jsonify([book.to_dict() for book in ten_random_books])
+            return jsonify([book.to_dict() for book in fall_back])
         
         recommendation_tuples = new_books_only_recommendations_list[:30]
         print(recommendation_tuples)
@@ -153,8 +163,11 @@ def recommend_book():
         print(recommendation_ids)
 
         recommended_books = [book for book in new_books if book.id in recommendation_ids]
-
+        print("<--recommended books length-->")
+        print(len(recommended_books))
         return [book.to_dict() for book in recommended_books]
+    
+    
     
 @app.route('/user_filtered_books', methods=['GET', 'POST'])
 def user_filtered_books_index():
