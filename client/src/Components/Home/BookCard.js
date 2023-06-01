@@ -13,6 +13,8 @@ function BookCard(){
     const [userFilteredAuthors, setUserFilteredAuthors] = useState([])
     const [userFilteredNarrators, setUserFilteredNarrators] = useState([])
 
+    console.log(bookQueue)
+
     useEffect(() => {
       fetch("/recommend_books")
       .then(res => res.json())

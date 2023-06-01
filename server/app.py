@@ -108,20 +108,25 @@ def recommend_book():
     if request.method == 'GET':
         user = User.query.get(session['user_id'])
         user_filtered_books = UserFilteredBook.query.filter(UserFilteredBook.user_id == user.id).all()
-        new_books = Book.query.filter(Book.id.notin_([user_book.book_id for user_book in user_filtered_books])).all()
         
         # Catch User with no data, probably new user----------------
         if len(user_filtered_books) == 0:
             fall_back = fall_back_random_books(20)
-            print('<---user has no filtered books--->')
+            print('<---Caught: User has no data, probably new user--->')
             return jsonify([book.to_dict() for book in fall_back])
         #-------------------------------------------------------
 
+        #Gather user unfiltered books---------------------------------------------
+        new_books = Book.query.filter(Book.id.notin_([user_book.book_id for user_book in user_filtered_books])).all()
+        #-------------------------------------------------------
+
+        #Sort user filtered books---------------------------------------------
         user_favorite_books = [user_book for user_book in user_filtered_books if user_book.user_favorite == True]
         user_liked_books = [user_book for user_book in user_filtered_books if user_book.user_vote == True]
         user_disliked_books = [user_book for user_book in user_filtered_books if user_book.user_vote == False and user_book.user_skipped == False]
+        #-------------------------------------------------------
 
-        #Gather and sort connections for user filtered books
+        #Gather and sort connections for user filtered books---------------------------------------------
         user_favourite_book_connections = [BookConnection.query.filter(BookConnection.book_id == user_book.id).all() for user_book in user_favorite_books]
         fav_book_connections_list = [book.connected_book_id for book_list in user_favourite_book_connections for book in book_list]
 
@@ -130,42 +135,118 @@ def recommend_book():
 
         user_disliked_book_connections = [BookConnection.query.filter(BookConnection.book_id == user_book.id).all() for user_book in user_disliked_books]
         disliked_book_connections_list = [book.connected_book_id for book_list in user_disliked_book_connections for book in book_list]
+        #---------------------------------------------------------
+        
+        #Process user data for authors, narrators and genres---------------------------------------------
+        user_filtered_authors = UserFilteredAuthor.query.filter(UserFilteredAuthor.user_id == user.id).all()
+        user_favorite_books_from_books_table = [Book.query.get(user_book.book_id) for user_book in user_favorite_books]
+        user_liked_books_from_books_table = [Book.query.get(user_book.book_id) for user_book in user_liked_books]
 
+        new_book_ids_associated_by_author = []
+
+        author_ids_from_fav_books = [book.author_id for book in user_favorite_books_from_books_table]
+        if len(author_ids_from_fav_books) > 0:
+            new_book_ids_associated_by_author += [book.id for book in new_books if book.author_id in author_ids_from_fav_books]
+        
+        user_favorited_author_ids = [entry.author_id for entry in user_filtered_authors if entry.user_favorite == True]
+        if len(user_favorited_author_ids) > 0:
+            new_book_ids_associated_by_author += [book.id for book in new_books if book.author_id in user_favorited_author_ids]
+
+        author_ids_from_liked_books = [book.author_id for book in user_liked_books_from_books_table]
+        if len(author_ids_from_liked_books) > 0:
+            new_book_ids_associated_by_author += [book.id for book in new_books if book.author_id in author_ids_from_liked_books]
+
+        user_liked_author_ids = [entry.author_id for entry in user_filtered_authors if entry.user_vote == True]
+        if len(user_liked_author_ids) > 0:
+            new_book_ids_associated_by_author += [book.id for book in new_books if book.author_id in user_liked_author_ids]
+
+
+        user_filtered_narrators = UserFilteredNarrator.query.filter(UserFilteredNarrator.user_id == user.id).all()
+        new_book_ids_associated_by_narrator = []
+
+        narrator_ids_from_fav_books = [book.narrator_id for book in user_favorite_books_from_books_table]
+        if len(narrator_ids_from_fav_books) > 0:
+            new_book_ids_associated_by_narrator += [book.id for book in new_books if book.narrator_id in narrator_ids_from_fav_books]
+
+        user_favorited_narrator_ids = [entry.narrator_id for entry in user_filtered_narrators if entry.user_favorite == True]
+        if len(user_favorited_narrator_ids) > 0:
+            new_book_ids_associated_by_narrator += [book.id for book in new_books if book.narrator_id in user_favorited_narrator_ids]
+
+        narrator_ids_from_liked_books = [book.narrator_id for book in user_liked_books_from_books_table]
+        if len(narrator_ids_from_liked_books) > 0:
+            new_book_ids_associated_by_narrator += [book.id for book in new_books if book.narrator_id in narrator_ids_from_liked_books]
+
+        user_liked_narrator_ids = [entry.narrator_id for entry in user_filtered_narrators if entry.user_vote == True]
+        if len(user_liked_narrator_ids) > 0:
+            new_book_ids_associated_by_narrator += [book.id for book in new_books if book.narrator_id in user_liked_narrator_ids]
+            
+        
+        user_filtered_genres = UserFilteredGenre.query.filter(UserFilteredGenre.user_id == user.id).all()
+
+        #Weight authors, narrators and genres --------------------------------------
+        author_narrator_genre_sum = []
+        author_narrator_genre_sum += new_book_ids_associated_by_author
+        author_narrator_genre_sum += new_book_ids_associated_by_author
+        author_narrator_genre_sum += new_book_ids_associated_by_narrator
+        #---------------------------------------------------------
+
+        #Weight connections --------------------------------------
         likes_minus_dislikes = [book for book in liked_book_connections_list if book not in disliked_book_connections_list]
-
         positive_connections = [fav_book_connections_list + likes_minus_dislikes + liked_book_connections_list]
         positive_connections_flat = [book_id for book_list in positive_connections for book_id in book_list]
-        count = Counter(tuple(positive_connections_flat))
+        #---------------------------------------------------------
 
-        recommendations_list = [book for book in count.most_common()]
-        user_filtered_book_ids = [user_book.book_id for user_book in user_filtered_books]
-
-        new_books_only_recommendations_list = [book for book in recommendations_list if book[0] not in user_filtered_book_ids]
-        print(len(new_books_only_recommendations_list))
-
-        if len(new_books_only_recommendations_list) == 0:
-            fall_back = fall_back_random_books(20)
-            print('<---new_books_only_recommendations_list is empty--->')
-            return jsonify([book.to_dict() for book in fall_back])
+        #Final Weighting -----------------------------------------
+        positive_connections_flat += positive_connections_flat
+        positive_connections_flat += author_narrator_genre_sum
+        #---------------------------------------------------------
         
-        recommendation_tuples = new_books_only_recommendations_list[:30]
+        #Count and sort recommendations into tuples containing the book id and recommendation score---------------------
+        count = Counter(tuple(positive_connections_flat))
+        sorted_recommendation_tuples = [book for book in count.most_common()]
+        #---------------------------------------------------------
+
+        #Check for duplicates and remove them---------------------
+        user_filtered_book_ids = [user_book.book_id for user_book in user_filtered_books]
+        sorted_recommendation_tuples_checked = [book for book in sorted_recommendation_tuples if book[0] not in user_filtered_book_ids]
+        print(len(sorted_recommendation_tuples_checked))
+        #---------------------------------------------------------
+
+        #Catch no new books to recommend----------------------------
+        if len(sorted_recommendation_tuples_checked) == 0:
+            fall_back = fall_back_random_books(20)
+            print('<---Caught: No new books to recommend--->')
+            return jsonify([book.to_dict() for book in fall_back])
+        #-------------------------------------------------------
+
+        #Return top 30 recommendations---------------------------
+        recommendation_tuples = sorted_recommendation_tuples_checked[:30]
         print(recommendation_tuples)
+        #-------------------------------------------------------
 
+        #Gather books ids from recommendation_tuples------------------------
         recommendation_ids = [recommendation[0] for recommendation in recommendation_tuples]
-        recommendation_ids = list(set(recommendation_ids))
+        #-------------------------------------------------------
 
+        #Catch not enough recommendations------------------------
         i = 0
         while (len(recommendation_ids) < 30) and (i < 100):
             random_new_book = rc(new_books)
             if random_new_book.id not in recommendation_ids:
                 recommendation_ids.append(random_new_book.id)
             i += 1
-        print(recommendation_ids)
+        #-------------------------------------------------------
 
-        recommended_books = [book for book in new_books if book.id in recommendation_ids]
-        print("<--recommended books length-->")
-        print(len(recommended_books))
-        return [book.to_dict() for book in recommended_books]
+        recommended_books_in_order = []
+        for Id in recommendation_ids:
+            for book in new_books:
+                if book.id == Id:
+                    recommended_books_in_order.append(book)
+
+        #    recommended_books = [book for book in new_books if book.id in recommendation_ids]
+        # ^^^Returning the books in order is much less efficient, maybe worth switching to this^^^ 
+
+        return [book.to_dict() for book in recommended_books_in_order]
     
     
     
